@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grupo e Equipe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfef4;--grid:#d9dcd0;--ink:#111;--card:#fff;--yellow:#f7f76a;--yellow-ink:#5c4a10;--red:#d62828;--muted:#4a4a44;
+--head:'Chewy','Comic Sans MS',cursive,sans-serif;--body:'Open Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--foot:52px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1b16;--grid:#33352c;--ink:#f6f6e8;--card:#24251f;--yellow:#e8e04a;--yellow-ink:#2b2508;--red:#ff6b6b;--muted:#c4c4b4}}
+:root[data-theme="dark"]{--bg:#1a1b16;--grid:#33352c;--ink:#f6f6e8;--card:#24251f;--yellow:#e8e04a;--yellow-ink:#2b2508;--red:#ff6b6b;--muted:#c4c4b4}
+*{box-sizing:inherit;margin:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;background-position:-1px -1px}
+.deck{position:fixed;inset:env(safe-area-inset-top,0px) 0 calc(var(--foot) + env(safe-area-inset-bottom,0px)) 0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,5vw,72px);opacity:0;visibility:hidden;transform:translateX(40px);transition:opacity .35s,transform .35s,visibility .35s;overflow-y:auto}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.past{transform:translateX(-40px)}
+h1,h2{font-family:var(--head);font-weight:400;line-height:1.05}
+h1{font-size:clamp(3.2rem,12vw,8rem);text-align:center;letter-spacing:.02em}
+h2{font-size:clamp(1.9rem,5vw,3.4rem);margin-bottom:clamp(14px,3vh,32px)}
+.names{text-align:center;font-weight:600;font-size:clamp(1rem,2.4vw,1.4rem);margin:10px 0}
+.tag{position:absolute;top:14px;left:18px;font-weight:700;font-size:1.05rem}
+.wrap{max-width:1000px;width:100%;margin:0 auto}
+ul{list-style:none;padding:0;display:grid;gap:12px;font-size:clamp(1.05rem,2.4vw,1.55rem)}
+li{padding-left:1.6em;position:relative;line-height:1.35}
+li::before{content:"";position:absolute;left:0;top:.45em;width:.7em;height:.7em;border-radius:50%;background:var(--yellow);border:2px solid var(--ink)}
+.phil{margin-top:clamp(16px,3vh,32px);background:var(--yellow);color:var(--yellow-ink);padding:12px 18px;border-radius:14px;font-size:clamp(.95rem,2vw,1.2rem);line-height:1.4;transform:rotate(-.6deg);max-width:760px}
+.phil b{font-family:var(--head);font-weight:400;font-size:1.15em}
+.cols{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
+.box{background:var(--card);border:2px solid var(--ink);border-radius:22px;padding:18px 20px}
+.box h3{font-family:var(--head);font-weight:400;font-size:clamp(1.4rem,3vw,2rem);margin-bottom:8px}
+.box ul{font-size:clamp(.95rem,2vw,1.25rem);gap:8px}
+.vs{font-family:var(--head);font-size:clamp(2rem,5vw,3.4rem)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.cards .box p{font-size:clamp(.95rem,1.9vw,1.15rem);line-height:1.45}
+.steps{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px;font-family:var(--head);font-size:clamp(1.05rem,2.3vw,1.5rem)}
+.steps span{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:4px 16px}
+.lesson{margin-top:18px;font-weight:700;font-size:clamp(1rem,2.1vw,1.3rem)}
+.big{font-family:var(--head);font-size:clamp(1.3rem,3.4vw,2.2rem);line-height:1.25;margin-bottom:14px}
+.blob{position:absolute;width:90px;height:60px;background:var(--yellow);border-radius:42% 58% 50% 50%;transform:rotate(-8deg);opacity:.9;pointer-events:none}
+.blob::after{content:"";position:absolute;inset:18px 14px;border-top:5px solid var(--yellow-ink);border-bottom:5px solid var(--yellow-ink);border-radius:50%;opacity:.7}
+footer{position:fixed;left:0;right:0;bottom:0;z-index:5;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--card);border-top:2px solid var(--ink)}
+.bar{height:var(--foot);display:flex;align-items:center;gap:10px;padding:0 14px}
+.bar button{font:700 .95rem var(--body);color:var(--ink);background:var(--bg);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.bar button:hover,.bar button:focus-visible{background:var(--yellow);color:var(--yellow-ink)}
+.bar .sp{flex:1;font-size:.85rem;color:var(--muted);text-align:center}
+.prog{position:absolute;left:0;top:-4px;height:4px;background:var(--red);transition:width .3s}
+#refs{display:none;max-height:42vh;overflow-y:auto;padding:12px 18px 16px;border-top:1px solid var(--grid);font-size:.82rem;line-height:1.45;columns:2 340px;column-gap:28px}
+#refs.open{display:block}
+#refs h4{font-family:var(--head);font-weight:400;font-size:1.2rem;column-span:all;margin-bottom:4px}
+#refs p{margin:0 0 6px;break-inside:avoid}
+#refs a{color:inherit;word-break:break-all}
+@media (max-width:640px){.cols{grid-template-columns:1fr}.vs{text-align:center}.bar .sp{display:none}.tag{position:static;margin-bottom:6px}}
+@media (prefers-reduced-motion:reduce){.slide,.prog{transition:none}}
+</style>
+</head>
+<body>
+<main class="deck" id="deck">
+
+<section class="slide" id="s1">
+  <i class="blob" style="top:6%;left:5%"></i><i class="blob" style="bottom:8%;right:6%;transform:rotate(10deg)"></i>
+  <h1>GRUPO</h1>
+  <p class="names">Vitor · Yasmin · Ryan · Alice · Rayssa</p>
+  <h1>EQUIPE</h1>
+</section>
+
+<section class="slide" id="s2">
+  <div class="wrap">
+    <h2>O que é um grupo de trabalho?</h2>
+    <ul>
+      <li>Pessoas que atuam juntas e compartilham informações</li>
+      <li>Cada uma responde pela <b>sua própria parte</b></li>
+      <li>Liderança centralizada</li>
+    </ul>
+    <p class="lesson">Exemplo: setor de vendas, cada vendedor com a sua meta.</p>
+    <div class="phil"><b>Filosofia</b> · Aristóteles, na <i>Política</i>: o ser humano é um “animal político”, feito para viver em comunidade.</div>
+  </div>
+</section>
+
+<section class="slide" id="s3">
+  <div class="wrap">
+    <h2>O que é uma equipe de trabalho?</h2>
+    <ul>
+      <li>Habilidades <b>complementares</b></li>
+      <li>Objetivo <b>comum</b></li>
+      <li>Trabalho <b>interdependente</b></li>
+      <li>Responsabilidade <b>coletiva</b> pelos resultados</li>
+    </ul>
+    <p class="lesson">Definição de Katzenbach e Smith (2001).</p>
+    <div class="phil"><b>Filosofia</b> · “O todo é maior que a soma das partes” (ideia atribuída a Aristóteles, <i>Metafísica</i>).</div>
+  </div>
+</section>
+
+<section class="slide" id="s4">
+  <div class="wrap">
+    <h2 style="text-align:center">Qual é a diferença entre grupo e equipe?</h2>
+    <div class="cols">
+      <div class="box"><h3>GRUPO</h3><ul><li>Responsabilidade individual</li><li>Resultado = soma de cada um</li><li>Metas separadas</li><li>Liderança centralizada</li></ul></div>
+      <div class="vs">vs</div>
+      <div class="box"><h3>EQUIPE</h3><ul><li>Individual e coletiva</li><li>Resultado conjunto, maior que a soma</li><li>Meta comum</li><li>Liderança compartilhada</li></ul></div>
+    </div>
+    <p class="lesson" style="text-align:center">Chamar um grupo de “equipe” não o transforma em equipe.</p>
+  </div>
+</section>
+
+<section class="slide" id="s5">
+  <div class="wrap">
+    <h2>Comunicação no trabalho coletivo</h2>
+    <ul>
+      <li>As informações circulam e os problemas aparecem cedo</li>
+      <li>As tarefas se encaixam e os erros não se repetem</li>
+      <li>No Google, as melhores equipes tinham <b>escuta ativa</b> e tempo de fala parecido</li>
+    </ul>
+    <div class="phil"><b>Filosofia</b> · Habermas: cooperamos quando dialogamos com honestidade e igualdade. Buber (<i>Eu e Tu</i>): tratar o outro como alguém, não como coisa.</div>
+  </div>
+</section>
+
+<section class="slide" id="s6">
+ 
+  <div class="wrap">
+    <h2>Conflitos entre colegas</h2>
+    <ul>
+      <li>Falta de clareza sobre quem faz o quê</li>
+      <li>Diferenças de personalidade e de jeito de trabalhar</li>
+      <li>Divisão desigual das tarefas</li>
+      <li>Mal-entendidos e pressão de prazos</li>
+    </ul>
+    <div class="steps"><span>Formação</span>→<span>Conflito</span>→<span>Normas</span>→<span>Desempenho</span></div>
+    <div class="phil"><b>Filosofia</b> · Kant: “insociável sociabilidade”. Precisamos viver juntos, e isso gera atritos. Tratado com respeito, o conflito melhora as ideias. (Fases de Tuckman, 1965)</div>
+  </div>
+</section>
+
+<section class="slide" id="s7">
+  <div class="wrap">
+    <h2>Desenvolvendo uma equipe produtiva</h2>
+    <ul>
+      <li><b>Segurança psicológica:</b> falar e errar sem medo</li>
+      <li><b>Confiança</b> e responsabilidade com o prazo combinado</li>
+      <li>Papéis e metas <b>claros</b></li>
+      <li>Escuta, feedback honesto e comemorar juntos</li>
+    </ul>
+    <div class="phil"><b>Filosofia</b> · Aristóteles: a amizade e a virtude sustentam a vida em comum. Ubuntu: “eu sou porque nós somos”.</div>
+  </div>
+</section>
+
+<section class="slide" id="s8">
+  
+  <i class="blob" style="top:4%;right:4%"></i>
+  <div class="wrap">
+    <h2>Tarefas individuais vs coletivas</h2>
+    <p class="big">E quando só uma pessoa faz tudo?</p>
+    <ul>
+      <li>Sobrecarga e esgotamento</li>
+      <li>Queda de qualidade e atrasos</li>
+      <li>Ressentimento entre colegas</li>
+      <li>Os outros relaxam (<i>ociosidade social</i>)</li>
+      <li>Ninguém mais aprende nem sabe substituir</li>
+    </ul>
+    <div class="phil"><b>Filosofia</b> · Rousseau, “a caça ao cervo”: se um abandona o posto, o cervo escapa e todos perdem.</div>
+  </div>
+</section>
+
+<section class="slide" id="s9">
+  <div class="wrap">
+    <h2>Diversidade de conhecimentos e habilidades</h2>
+    <ul>
+      <li>Cada pessoa vê o problema por um ângulo diferente</li>
+      <li>Um supre o que falta ao outro</li>
+      <li>Mais inovação, menos pontos cegos</li>
+    </ul>
+    <div class="phil"><b>Pensadores</b> · Platão: cada um faz o que tem aptidão. Adam Smith: dividir tarefas multiplica a produção. Belbin: equipes precisam de papéis diferentes. Catmull (Pixar): uma equipe brilhante conserta uma ideia mediana.</div>
+  </div>
+</section>
+
+<section class="slide" id="s10">
+  <div class="wrap">
+    <h2>Quando o grupo falha: Challenger (1986)</h2>
+    <ul>
+      <li>Engenheiros da Morton Thiokol pediram para adiar o lançamento por causa do frio</li>
+      <li>A gerência reverteu a posição deles e recomendou lançar</li>
+      <li>O ônibus espacial explodiu 73 segundos depois, e os sete tripulantes morreram</li>
+      <li>A Comissão Rogers concluiu que, com todos os fatos em mãos, provavelmente não teriam lançado</li>
+    </ul>
+    <p class="lesson">Lição: havia gente qualificada, mas faltou escuta e segurança para falar. Era um grupo, não uma equipe.</p>
+  </div>
+</section>
+
+<section class="slide" id="s11">
+  <div class="wrap">
+    <h2>Quando a equipe vence: Pixar e <i>Toy Story 2</i></h2>
+    <ul>
+      <li>O filme estava tão ruim que Ed Catmull o chamou de “quebrado”</li>
+      <li>Nasceu o <b>Braintrust</b>: contadores de histórias dão feedback franco ao diretor</li>
+      <li>Regra central: <b>franqueza</b> (<i>candor</i>), sem crueldade</li>
+      <li>Resultado: 1º lugar nas bilheterias e mais de US$ 500 milhões</li>
+    </ul>
+    <p class="lesson">Lição: feedback honesto, confiança e objetivo comum.</p>
+  </div>
+</section>
+
+<section class="slide" id="s12">
+  <div class="wrap">
+    <h2>Empresa que colabora: Google</h2>
+    <p class="big">Projeto Aristóteles: 180 equipes estudadas por 2 anos</p>
+    <div class="cards">
+      <div class="box"><h3>1</h3><p>Segurança psicológica</p></div>
+      <div class="box"><h3>2</h3><p>Confiança</p></div>
+      <div class="box"><h3>3</h3><p>Clareza de papéis e metas</p></div>
+      <div class="box"><h3>4</h3><p>Sentido no trabalho</p></div>
+      <div class="box"><h3>5</h3><p>Impacto do que se faz</p></div>
+    </div>
+    <p class="lesson">O segredo não era ter “gênios”, e sim como as pessoas se tratam.</p>
+  </div>
+</section>
+
+<section class="slide" id="s13">
+  <i class="blob" style="top:8%;left:10%"></i><i class="blob" style="top:8%;right:10%;transform:rotate(8deg)"></i>
+  <div class="wrap">
+    <h2 style="text-align:center">Conclusão</h2>
+    <div class="cards">
+      <div class="box"><h3>Comunicar</h3><p>Sem diálogo, o grupo não vira equipe.</p></div>
+      <div class="box"><h3>Dividir</h3><p>Todos assumem a responsabilidade pelo resultado.</p></div>
+      <div class="box"><h3>Somar</h3><p>Diferenças bem usadas geram resultados maiores.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="prog" id="prog"></div>
+  <div id="refs" aria-label="Referências">
+    <h4>Referências</h4>
+    <p>KATZENBACH, J.; SMITH, D. <i>A disciplina de equipes</i>. Harvard Business Review. <a href="https://edisciplinas.usp.br/pluginfile.php/4517343/mod_resource/content/1/T15a_Grupo%20e%20equipe%20-%20conceitos_2014.pdf">edisciplinas.usp.br</a></p>
+    <p>Definição de equipe (Katzenbach e Smith, 2001). <a href="https://www.redalyc.org/pdf/3967/396742026013.pdf">redalyc.org</a></p>
+    <p>Grupo e equipe: uma pesquisa (Moscovici; Robbins). <a href="https://edisciplinas.usp.br/pluginfile.php/5579458/mod_resource/content/2/T6b_Grupo%20e%20equipe%20-%20uma%20pesquisa.pdf">edisciplinas.usp.br</a></p>
+    <p>Dificuldades para formar equipes. <a href="https://dialnet.unirioja.es/descarga/articulo/4806567.pdf">dialnet.unirioja.es</a></p>
+    <p>Projeto Aristóteles (Google). <a href="https://resources.rework.com/pt/libraries/business-culture/psychological-safety-at-work">rework.com</a> · <a href="https://www.baguete.com.br/noticias/conheca-o-segredo-de-um-time-eficaz">baguete.com.br</a> · <a href="https://forbes.com.br/carreira/2021/12/seguranca-psicologica-o-segredo-das-equipes-inovadoras/">forbes.com.br</a></p>
+    <p>CATMULL, E.; WALLACE, A. <i>Criatividade S.A.</i> (<i>Creativity, Inc.</i>), 2014. <a href="https://www.fastcompany.com/3027135/inside-the-pixar-braintrust">fastcompany.com</a></p>
+    <p>Relatório da Comissão Rogers (Challenger). <a href="https://www.nasa.gov/history/rogersrep/v1ch5.htm">nasa.gov</a></p>
+    <p>Axios: Challenger como parábola de decisão (2026). <a href="https://www.axios.com/local/salt-lake-city/2026/01/27/challenger-explosion-engineers-nasa-thiokol-utah">axios.com</a></p>
+    <p>VAUGHAN, D. <i>The Challenger Launch Decision</i>, 1996.</p>
+    <p>ARISTÓTELES. <i>Política</i>; <i>Ética a Nicômaco</i>; <i>Metafísica</i>. PLATÃO. <i>A República</i>. ROUSSEAU, J.-J. <i>Discurso sobre a Desigualdade</i>. KANT, I. <i>Ideia de uma História Universal</i>. SMITH, A. <i>A Riqueza das Nações</i>. HABERMAS, J. <i>Teoria do Agir Comunicativo</i>. BUBER, M. <i>Eu e Tu</i>. TUCKMAN, B., 1965. BELBIN, M. <i>Management Teams</i>, 1981.</p>
+  </div>
+  <div class="bar">
+    <button id="prev" aria-label="Slide anterior">◀</button>
+    <button id="next" aria-label="Próximo slide">▶</button>
+    <span class="sp" id="count"></span>
+    <span class="sp" style="flex:2">Use as setas do teclado ou deslize</span>
+    <button id="rbtn" aria-expanded="false">Referências ▴</button>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide')),n=slides.length,i=0;
+  var prog=document.getElementById('prog'),count=document.getElementById('count'),refs=document.getElementById('refs'),rbtn=document.getElementById('rbtn');
+  function show(k,upd){
+    i=Math.max(0,Math.min(n-1,k));
+    slides.forEach(function(s,j){s.classList.toggle('on',j===i);s.classList.toggle('past',j<i);if(j===i)s.scrollTop=0;});
+    prog.style.width=((i+1)/n*100)+'%';count.textContent=(i+1)+' / '+n;
+    if(upd!==false){try{history.replaceState(null,'','#slide-'+(i+1));}catch(e){}}
+  }
+  function fromHash(){var m=/^#slide-(\d+)$/.exec(location.hash);return m?parseInt(m[1],10)-1:0;}
+  function toggleRefs(open){
+    var o=typeof open==='boolean'?open:!refs.classList.contains('open');
+    refs.classList.toggle('open',o);rbtn.setAttribute('aria-expanded',o);rbtn.textContent=o?'Fechar ▾':'Referências ▴';
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  rbtn.onclick=function(){toggleRefs()};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){show(i-1)}
+    else if(e.key==='Home'){show(0)}else if(e.key==='End'){show(n-1)}
+    else if(e.key==='Escape'){toggleRefs(false)}
+  });
+  var x0=null;
+  document.getElementById('deck').addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.getElementById('deck').addEventListener('touchend',function(e){
+    if(x0===null)return;var d=e.changedTouches[0].clientX-x0;x0=null;
+    if(Math.abs(d)>50)show(d<0?i+1:i-1);
+  });
+  window.addEventListener('hashchange',function(){show(fromHash(),false)});
+  show(fromHash(),false);
+})();
+</script>
+</body>
+</html>
